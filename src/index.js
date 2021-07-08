@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import tileGame from './reducers/tile-game-reducer'
-import { initGame /*, shuffleTiles*/ } from './reducers/actions';
+import { initGame, shuffleTiles } from './reducers/actions';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
@@ -17,7 +17,7 @@ const store = createStore(tileGame, composeEnhancers(
 ));
 
 store.dispatch(initGame(Math.floor(Math.random() * NumImages) + 1, 4));
-//store.dispatch(shuffleTiles())
+store.dispatch(shuffleTiles())
 ReactDOM.render(
     <Provider store={store}>
         <App />

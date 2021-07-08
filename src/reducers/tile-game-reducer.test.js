@@ -2,23 +2,7 @@ import { INIT_GAME, SELECT_TILE, REVERSE_TILES } from './actions';
 import deepFreeze from 'deep-freeze';
 import tileGame from './tile-game-reducer';
 
-test('InitGame should not mutate data', () => {
-    const initialState = {
-        turnNo: 1,
-        numClicksWithinTurn: 0,
-        selectedId: undefined,
-        gameComplete: false,
-        imageNumber: 1,
-        tiles: [],
-        size: undefined
-    };
-    const action = { type: INIT_GAME, size: 4, imageNumber: 1 };
-    deepFreeze([initialState]);
-    let newState = tileGame(initialState, action);
-    expect(newState.size).toBe(4);
-});
-
-test('SelectTile should not mutate data', () => {
+test('Reducers should not mutate data', () => {
     const initialState = {
         turnNo: 1,
         numClicksWithinTurn: 0,

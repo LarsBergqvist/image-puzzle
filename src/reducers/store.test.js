@@ -3,7 +3,7 @@ import tileGame from './tile-game-reducer';
 import { initGame, reverseTiles, selectTile } from './actions';
 
 //
-// With an unshuffled tile set, the id and position of a tile are identical
+// With an unshuffled tile set, the id and position/index of a tile are identical
 //
 test('InitGame should create correct state', () => {
     const store = createStore(tileGame);
