@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import tileGame from './reducers'
-import { initGame, shuffleTiles } from './actions';
+import tileGame from './reducers/tile-game-reducer'
+import { initGame /*, shuffleTiles*/ } from './reducers/actions';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'

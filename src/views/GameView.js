@@ -1,22 +1,14 @@
 import React, { Component } from 'react';
 import './Game.css';
 import { connect } from 'react-redux'
-import { selectTile, initGame, shuffleTiles } from './actions';
+import { selectTile, initGame, shuffleTiles } from '../reducers/actions';
 import GameStatusView from './GameStatusView';
 import PuzzleView from './PuzzleView';
-import { NumImages } from './constants';
+import { NumImages } from '../constants';
+import PropTypes from 'prop-types';
 
 class Game extends Component {
     render() {
-        /*
-        const blocks = this.props.tiles.sort((a, b) => a.pos > b.pos).map(c =>
-            <TileView key={c.id}
-                id={c.id} pos={c.pos} left={c.left} top={c.top} selected={c.selected}
-                imageNumber={this.props.imageNumber}
-                onClick={this.props.onTileClicked}
-            />
-        );
-*/
         const gameHUD = <GameStatusView
             gameComplete={this.props.gameComplete}
             turnNo={this.props.turnNo}
@@ -33,11 +25,21 @@ class Game extends Component {
                     {gameHUD}
                 </div>
                 <PuzzleView />
-                <button className='game-button' onClick={this.props.onInitGame}>Restart game</button>
+                <button className='game-button' onClick={() => this.props.onInitGame(4)}>Restart 4x4</button>
+                <button className='game-button' onClick={() => this.props.onInitGame(5)}>Restart 5x5</button>
+                <button className='game-button' onClick={() => this.props.onInitGame(6)}>Restart 6x6</button>
+                <button className='game-button' onClick={() => this.props.onInitGame(7)}>Restart 7x7</button>
             </div>
         );
     }
 }
+
+Game.propTypes = {
+    gameComplete: PropTypes.bool,
+    turnNo: PropTypes.number,
+    onInitGame: PropTypes.func,
+    numClicksWithinTurn: PropTypes.number
+};
 
 const mapStateToProps = state => {
     return {
@@ -54,8 +56,8 @@ const mapDispatchToProps = dispatch => {
         onTileClicked: id => {
             dispatch(selectTile(id));
         },
-        onInitGame: numPairs => {
-            dispatch(initGame(Math.floor(Math.random() * NumImages) + 1, 4));
+        onInitGame: size => {
+            dispatch(initGame(Math.floor(Math.random() * NumImages) + 1, size));
             dispatch(shuffleTiles())
         }
     }

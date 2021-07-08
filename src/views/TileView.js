@@ -1,15 +1,8 @@
 import React from 'react';
 import './Game.css';
+import PropTypes from 'prop-types';
 
 function TileView(props) {
-    /*
-    let bgPos = 'left ' + props.left + 'px top ' + props.top + 'px';
-    const imPath = `${window.location.href}/images/img${props.imageNumber}.jpg`;
-    let style = {
-        backgroundPosition: bgPos,
-        backgroundImage: "url(" + imPath + ")"
-    }
-    */
     const i = props.id;
     const top = -(Math.floor(i / props.size)) * props.tileWidth;
     const left = i < props.size ? -i * props.tileWidth : -(i % props.size) * props.tileWidth;
@@ -19,7 +12,6 @@ function TileView(props) {
         backgroundPosition: `left ${left}px top ${top}px`,
         backgroundImage: `url('${imPath}')`,
     }
-
 
     if (props.correctPos) {
         // Use a special style as a hint on that the tile is on
@@ -40,5 +32,15 @@ function TileView(props) {
         </div>
     );
 }
+
+TileView.propTypes = {
+    id: PropTypes.number,
+    size: PropTypes.number,
+    tileWidth: PropTypes.number,
+    selected: PropTypes.bool,
+    correctPos: PropTypes.bool,
+    imageNumber: PropTypes.number,
+    onClick: PropTypes.func
+};
 
 export default TileView;

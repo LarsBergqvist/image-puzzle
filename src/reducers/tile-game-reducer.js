@@ -4,17 +4,16 @@ import {
     SELECT_TILE,
     REVERSE_TILES,
 } from './actions';
-import { generateTileSet, shuffleTileSet, swapTilesInSet, allTilesAreAligned, reverseTileSet } from './tileSetFunctions';
+import { generateTileSet, shuffleTileSet, swapTilesInSet, allTilesAreAligned, reverseTileSet } from './tileset-functions';
 
 const initialState = {
     turnNo: 1,
     numClicksWithinTurn: 0,
-    sourceId: undefined,
-    destId: undefined,
+    selectedId: undefined,
     gameComplete: false,
     imageNumber: 1,
     tiles: [],
-    size: 4  // number of rows/columns in the puzzle matrix
+    size: undefined  // number of rows/columns in the puzzle matrix
 };
 
 
@@ -31,17 +30,16 @@ const initialState = {
 //    
 function tileGame(state = initialState, action) {
     switch (action.type) {
-        case INIT_GAME:
-            {
-                return Object.assign({}, initialState,
-                    {
-                        imageNumber: action.imageNumber,
-                        tiles: generateTileSet(action.size),
-                        size: action.size
-                    });
-            }
+        case INIT_GAME: {
+            return Object.assign({}, initialState,
+                {
+                    imageNumber: action.imageNumber,
+                    tiles: generateTileSet(action.size),
+                    size: action.size
+                });
+        }
 
-        case SELECT_TILE:
+        case SELECT_TILE: {
             if (state.gameComplete) {
                 return state;
             }
@@ -56,20 +54,22 @@ function tileGame(state = initialState, action) {
                 });
 
                 return Object.assign({}, state, {
-                    sourceId: action.id,
+                    selectedId: action.id,
                     numClicksWithinTurn: numClicks,
                     gameComplete: allTilesAreAligned(newTiles),
                     tiles: newTiles
                 });
             } else if (numClicks === 2) {
-                const newTiles = state.tiles.map(t => {
-                    t.selected = false;
-                    return t;
-                });
-                const setWithSwappedTiles = swapTilesInSet(newTiles, state.sourceId, action.id);
+                const newTiles = state.tiles.map(t => Object.assign({}, t, { selected: false }));
+                if (action.id === state.selectedId) {
+                    return Object.assign({}, state, {
+                        numClicksWithinTurn: 0,
+                        tiles: newTiles
+                    });
+                }
+                const setWithSwappedTiles = swapTilesInSet(newTiles, state.selectedId, action.id);
 
                 return Object.assign({}, state, {
-                    destId: action.id,
                     numClicksWithinTurn: 0,
                     gameComplete: allTilesAreAligned(setWithSwappedTiles),
                     turnNo: state.turnNo + 1,
@@ -78,18 +78,17 @@ function tileGame(state = initialState, action) {
             } else {
                 return state;
             }
+        }
 
-        case SHUFFLE_TILES:
-            {
-                const newTiles = shuffleTileSet(state.tiles);
-                return Object.assign({}, state, { tiles: newTiles });
-            }
+        case SHUFFLE_TILES: {
+            const newTiles = shuffleTileSet(state.tiles);
+            return Object.assign({}, state, { tiles: newTiles });
+        }
 
-        case REVERSE_TILES:
-            {
-                const newTiles = reverseTileSet(state.tiles);
-                return Object.assign({}, state, { tiles: newTiles });
-            }
+        case REVERSE_TILES: {
+            const newTiles = reverseTileSet(state.tiles);
+            return Object.assign({}, state, { tiles: newTiles });
+        }
 
         default:
             return state;

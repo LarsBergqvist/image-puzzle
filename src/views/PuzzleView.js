@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { PuzzleWidth } from './constants';
+import { PuzzleWidth } from '../constants';
 import TileView from './TileView'
-import { selectTile } from './actions';
+import { selectTile } from '../reducers/actions';
 import PropTypes from 'prop-types';
 
 const Puzzle = (props) => {
