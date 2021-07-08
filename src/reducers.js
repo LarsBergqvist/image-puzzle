@@ -13,16 +13,33 @@ const initialState = {
     destId: undefined,
     gameComplete: false,
     imageNumber: 1,
-    tiles: []
+    tiles: [],
+    size: 4  // number of rows/columns in the puzzle matrix
 };
 
 
 // The reducer for the game
-// state is an object with game state and an array of tiles
+// State is an object with game status and an array of tiles
+// The array represents a size*size matrix with a unique 
+// numerical value 0...size*size-1 per tile
+// A tile is an object with these properties:
+// {
+//    id: number, // the number/value for the tile
+//    top: number, // pixel offset for the image that is projected on the tile
+//    left: number // pixel offset for the image that is projected on the tile
+// }
+//    
 function tileGame(state = initialState, action) {
     switch (action.type) {
         case INIT_GAME:
-            return Object.assign({}, initialState, { imageNumber: action.imageNumber, tiles: generateTileSet() });
+            {
+                return Object.assign({}, initialState,
+                    {
+                        imageNumber: action.imageNumber,
+                        tiles: generateTileSet(action.size),
+                        size: action.size
+                    });
+            }
 
         case SELECT_TILE:
             if (state.gameComplete) {
@@ -64,13 +81,13 @@ function tileGame(state = initialState, action) {
 
         case SHUFFLE_TILES:
             {
-                const newTiles = shuffleTileSet([...state.tiles]);
+                const newTiles = shuffleTileSet(state.tiles);
                 return Object.assign({}, state, { tiles: newTiles });
             }
 
         case REVERSE_TILES:
             {
-                const newTiles = reverseTileSet([...state.tiles]);
+                const newTiles = reverseTileSet(state.tiles);
                 return Object.assign({}, state, { tiles: newTiles });
             }
 

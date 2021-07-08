@@ -42,7 +42,6 @@
 
 .tile-container {
   display: grid;
-  grid-template-columns: repeat(4, 100px);
   grid-gap: 0px;
 }
 
@@ -51,7 +50,6 @@
   outline-offset: -1px;
 
   overflow: hidden;
-  background-size: auto 400px;
   width: 100%;
   padding-top: 100%;
 }
@@ -59,8 +57,6 @@
 .tile-wrapper {
   position: relative;
   margin: auto;
-  width: 400px;
-
 }
 
 .selected {

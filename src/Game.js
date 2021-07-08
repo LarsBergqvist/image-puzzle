@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import TileView from './TileView'
 import './Game.css';
 import { connect } from 'react-redux'
 import { selectTile, initGame, shuffleTiles } from './actions';
 import GameStatusView from './GameStatusView';
+import PuzzleView from './PuzzleView';
+import { NumImages } from './constants';
 
 class Game extends Component {
     render() {
+        /*
         const blocks = this.props.tiles.sort((a, b) => a.pos > b.pos).map(c =>
             <TileView key={c.id}
                 id={c.id} pos={c.pos} left={c.left} top={c.top} selected={c.selected}
@@ -14,7 +16,7 @@ class Game extends Component {
                 onClick={this.props.onTileClicked}
             />
         );
-
+*/
         const gameHUD = <GameStatusView
             gameComplete={this.props.gameComplete}
             turnNo={this.props.turnNo}
@@ -30,13 +32,7 @@ class Game extends Component {
                 <div className='game-status'>
                     {gameHUD}
                 </div>
-                <div>
-                    <div className='tile-wrapper'>
-                        <div className='tile-container'>
-                            {blocks}
-                        </div>
-                    </div>
-                </div>
+                <PuzzleView />
                 <button className='game-button' onClick={this.props.onInitGame}>Restart game</button>
             </div>
         );
@@ -59,7 +55,7 @@ const mapDispatchToProps = dispatch => {
             dispatch(selectTile(id));
         },
         onInitGame: numPairs => {
-            dispatch(initGame(Math.floor(Math.random() * 6) + 1));
+            dispatch(initGame(Math.floor(Math.random() * NumImages) + 1, 4));
             dispatch(shuffleTiles())
         }
     }

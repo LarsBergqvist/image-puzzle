@@ -1,14 +1,13 @@
 
 import shuffle from 'shuffle-array';
 
-export function generateTileSet() {
+export function generateTileSet(size) {
     let newTilesArray = [];
-    for (let i = 0; i < 16; i++) {
+    for (let i = 0; i < size * size; i++) {
         let newTile = {
             id: i,
-            top: -(Math.floor(i / 4)) * 100,
-            left: i < 4 ? -i * 100 : -(i % 4) * 100,
-            pos: i
+            top: -(Math.floor(i / size)) * 100,
+            left: i < size ? -i * 100 : -(i % size) * 100,
         };
         newTilesArray.push(newTile);
     }
@@ -16,35 +15,29 @@ export function generateTileSet() {
 }
 
 export function reverseTileSet(tiles) {
-    const newTiles = tiles.reverse();
-    for (let i = 0; i < 16; i++) {
-        let tile = newTiles[i];
-        tile.pos = i;
-    }
-    return newTiles;
+    return [...tiles].reverse();
 }
 
 export function shuffleTileSet(tiles) {
-    const newTiles = shuffle(tiles);
-    for (let i = 0; i < 16; i++) {
-        let tile = newTiles[i];
-        tile.pos = i;
-    }
-    return newTiles;
+    return shuffle([...tiles]);
 }
 
-export function swapTilesInSet(tiles, id1, id2) {
-    let source = Object.assign({}, tiles.find(t => t.id === id1));
-    let dest = Object.assign({}, tiles.find(t => t.id === id2));
-    let sourcePos = source.pos;
-    source.pos = dest.pos;
-    source.selected = false;
-    tiles[source.pos] = source;
-    dest.pos = sourcePos;
-    tiles[dest.pos] = dest;
-    return tiles;
+export function swapTilesInSet(tiles, sourceId, destId) {
+    const copy = [...tiles];
+    let sourceIdx = copy.findIndex(t => t.id === sourceId);
+    let source = copy[sourceIdx];
+    let destIdx = copy.findIndex(t => t.id === destId);
+    let dest = Object.assign({}, copy[destIdx]);
+    copy[destIdx] = source;
+    copy[sourceIdx] = dest;
+    return copy;
 }
 
 export function allTilesAreAligned(tiles) {
-    return (tiles.findIndex(t => t.id !== t.pos) === -1);
+    for (let i = 0; i < tiles.length; i++) {
+        if (tiles[i].id !== i) {
+            return false;
+        }
+    }
+    return true;
 }

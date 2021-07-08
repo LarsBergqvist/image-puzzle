@@ -3,8 +3,8 @@ export const SHUFFLE_TILES = 'SHUFFLE_TILES';
 export const REVERSE_TILES = 'REVERSE_TILES';
 export const SELECT_TILE = 'SELECT_TILE';
 
-export function initGame(imageNumber) {
-    return { type: INIT_GAME, imageNumber };
+export function initGame(imageNumber, size) {
+    return { type: INIT_GAME, imageNumber, size };
 }
 
 export function selectTile(id) {
