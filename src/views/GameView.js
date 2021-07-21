@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 
 const Game = (props) =>
     <div className='game'>
-        <GameHeaderView />
+        <GameHeaderView gameName={props.gameName} />
         <GameStatusView />
         <PuzzleView />
         <RestartButtonsView />
@@ -18,6 +18,7 @@ const Game = (props) =>
     </div>
 
 Game.propTypes = {
+    gameName: PropTypes.string,
     highScoreList: PropTypes.object
 };
 

@@ -41,16 +41,24 @@ const GameStatus = props => {
 GameStatus.propTypes = {
     gameComplete: PropTypes.bool,
     turnNo: PropTypes.number,
-    numClicksWithinTurn: PropTypes.number
+    numClicksWithinTurn: PropTypes.number,
+    highScorePosition: PropTypes.number,
+    highScoreListSaved: PropTypes.bool,
+    highScoreList: PropTypes.object,
+    userId: PropTypes.string,
 };
 
 const mapStateToProps = state => {
     return {
         gameComplete: state.gameComplete,
         turnNo: state.turnNo,
-        numClicksWithinTurn: state.numClicksWithinTurn
+        numClicksWithinTurn: state.numClicksWithinTurn,
+        highScoreList: state.highScoreList,
+        highScorePosition: state.highScorePosition,
+        highScoreListSaved: state.highScoreListSaved,
+        userId: state.userId
     }
-}
+};
 
 const GameStatusView = connect(
     mapStateToProps

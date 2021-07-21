@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const LeaderBoardView = (props) => {
-    if (!props.highScoreList) return <>apa</>;
+    if (!props.highScoreList) return <></>;
     const rows = props.highScoreList.results.map((r, idx) => {
         let className = '';
         if (props.userId && r.id === props.userId) {

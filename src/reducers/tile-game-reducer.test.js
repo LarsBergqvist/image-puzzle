@@ -1,6 +1,7 @@
 import { INIT_GAME, SELECT_TILE, REVERSE_TILES } from './actions';
 import deepFreeze from 'deep-freeze';
 import tileGame from './tile-game-reducer';
+import { GameId_4x4 } from '../constants';
 
 test('Reducers should not mutate data', () => {
     const initialState = {
@@ -10,10 +11,17 @@ test('Reducers should not mutate data', () => {
         gameComplete: false,
         imageNumber: 1,
         tiles: [],
-        size: undefined
+        size: undefined,
+        gameId: undefined,
+        gameName: undefined,
+        highScoreList: undefined,
+        highScorePosition: -1,
+        userName: undefined,
+        userId: undefined,
+        highScoreListSaved: false
     };
     deepFreeze([initialState]);
-    const action1 = { type: INIT_GAME, size: 4, imageNumber: 1 };
+    const action1 = { type: INIT_GAME, gameId: GameId_4x4, imageNumber: 1 };
     const newState1 = tileGame(initialState, action1);
     expect(newState1.size).toBe(4);
     expect(newState1.tiles[0].id).toBe(0);

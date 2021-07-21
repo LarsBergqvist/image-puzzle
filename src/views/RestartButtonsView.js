@@ -4,6 +4,7 @@ import { GameId_4x4, GameId_5x5, GameId_6x6, GameId_7x7, NumImages } from '../co
 import { initGame, shuffleTiles } from '../reducers/actions';
 import './Game.css';
 import PropTypes from 'prop-types';
+import { fetchHighScoreList } from '../reducers/thunks';
 
 const RestartButtons = (props) =>
     <>
@@ -21,7 +22,8 @@ const mapDispatchToProps = dispatch => {
     return {
         onInitGame: gameId => {
             dispatch(initGame(gameId, Math.floor(Math.random() * NumImages) + 1));
-            dispatch(shuffleTiles())
+            dispatch(shuffleTiles());
+            dispatch(fetchHighScoreList);
         }
     }
 }

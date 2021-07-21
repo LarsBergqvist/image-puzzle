@@ -1,7 +1,7 @@
 export const gameConfigs = [
     {
         'name': '4x4 Puzzle',
-        'size': 2,
+        'size': 4,
         'highscorelistid': process.env.REACT_APP_HIGHSCORELISTID_4x4
     },
     {

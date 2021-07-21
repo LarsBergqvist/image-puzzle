@@ -1,14 +1,9 @@
 import { gameConfigs } from '../game-configs';
 import {
-    SHUFFLE_TILES,
-    INIT_GAME,
-    SELECT_TILE,
-    REVERSE_TILES,
-    HIGHSCORE_LIST_LOADED,
-    NAME_CHANGED,
-    HIGHSCORE_LIST_SAVED,
+    HIGHSCORE_LIST_LOADED, HIGHSCORE_LIST_SAVED, INIT_GAME, NAME_CHANGED, REVERSE_TILES, SELECT_TILE, SHUFFLE_TILES
 } from './actions';
-import { generateTileSet, shuffleTileSet, swapTilesInSet, allTilesAreAligned, reverseTileSet } from './tileset-functions';
+import { allTilesAreAligned, generateTileSet, reverseTileSet, shuffleTileSet, swapTilesInSet, getIndexInHighScoreList } from './tileset-functions';
+import { v4 as uuidv4 } from 'uuid';
 
 const initialState = {
     turnNo: 1,
@@ -67,30 +62,56 @@ function tileGame(state = initialState, action) {
                 return Object.assign({}, state, {
                     selectedId: action.id,
                     numClicksWithinTurn: numClicks,
-                    gameComplete: allTilesAreAligned(newTiles),
+                    gameComplete: false,
                     tiles: newTiles
                 });
-            } else if (numClicks === 2) {
-                const newTiles = state.tiles.map(t => t);
-                if (action.id === state.selectedId) {
-                    return Object.assign({}, state, {
-                        selectedId: undefined,
-                        numClicksWithinTurn: 0,
-                        tiles: newTiles
-                    });
-                }
-                const setWithSwappedTiles = swapTilesInSet(newTiles, state.selectedId, action.id);
+            }
 
+            const newTiles = state.tiles.map(t => t);
+            if (action.id === state.selectedId) {
                 return Object.assign({}, state, {
                     selectedId: undefined,
                     numClicksWithinTurn: 0,
-                    gameComplete: allTilesAreAligned(setWithSwappedTiles),
-                    turnNo: state.turnNo + 1,
-                    tiles: setWithSwappedTiles
+                    tiles: newTiles
                 });
-            } else {
-                return state;
             }
+            const setWithSwappedTiles = swapTilesInSet(newTiles, state.selectedId, action.id);
+            const gameComplete = allTilesAreAligned(setWithSwappedTiles);
+
+            if (gameComplete && state.highScoreList) {
+                const newUserId = uuidv4();
+                const time = Date.now();
+                const idxInHighScoreList = getIndexInHighScoreList(newUserId, time, state.turnNo + 1, state.highScoreList);
+                if (idxInHighScoreList > -1) {
+                    // User made it into the leaderboard
+                    return Object.assign({}, state, {
+                        selectedId: undefined,
+                        numClicksWithinTurn: 0,
+                        gameComplete,
+                        turnNo: state.turnNo + 1,
+                        tiles: setWithSwappedTiles,
+                        highScorePosition: idxInHighScoreList + 1,
+                        userId: newUserId
+                    });
+                } else {
+                    // User dit not make it into the leaderboard
+                    return Object.assign({}, state, {
+                        selectedId: undefined,
+                        numClicksWithinTurn: 0,
+                        gameComplete,
+                        turnNo: state.turnNo + 1,
+                        tiles: setWithSwappedTiles,
+                        highScorePosition: idxInHighScoreList + 1
+                    });
+                }
+            }
+            return Object.assign({}, state, {
+                selectedId: undefined,
+                numClicksWithinTurn: 0,
+                gameComplete,
+                turnNo: state.turnNo + 1,
+                tiles: setWithSwappedTiles
+            });
         }
 
         case SHUFFLE_TILES: {

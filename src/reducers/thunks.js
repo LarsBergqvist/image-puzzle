@@ -34,7 +34,7 @@ export async function updateHighScoreList(dispatch, getState) {
 
     let body = {
         userName: state.userName,
-        score: state.moves,
+        score: state.turnNo - 1,
         id: state.userId
     };
 
