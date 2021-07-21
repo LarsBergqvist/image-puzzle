@@ -1,8 +1,12 @@
+import { gameConfigs } from '../game-configs';
 import {
     SHUFFLE_TILES,
     INIT_GAME,
     SELECT_TILE,
     REVERSE_TILES,
+    HIGHSCORE_LIST_LOADED,
+    NAME_CHANGED,
+    HIGHSCORE_LIST_SAVED,
 } from './actions';
 import { generateTileSet, shuffleTileSet, swapTilesInSet, allTilesAreAligned, reverseTileSet } from './tileset-functions';
 
@@ -13,7 +17,14 @@ const initialState = {
     gameComplete: false,
     imageNumber: 1,
     tiles: [],
-    size: undefined  // number of rows/columns in the puzzle matrix
+    size: undefined,  // number of rows/columns in the puzzle matrix
+    gameId: undefined,
+    gameName: undefined,
+    highScoreList: undefined,
+    highScorePosition: -1,
+    userName: undefined,
+    userId: undefined,
+    highScoreListSaved: false
 };
 
 
@@ -31,11 +42,15 @@ const initialState = {
 function tileGame(state = initialState, action) {
     switch (action.type) {
         case INIT_GAME: {
+            const size = gameConfigs[action.gameId].size
             return Object.assign({}, initialState,
                 {
+                    gameId: action.gameId,
+                    size,
+                    gameName: gameConfigs[action.gameId].name,
                     imageNumber: action.imageNumber,
-                    tiles: generateTileSet(action.size),
-                    size: action.size
+                    tiles: generateTileSet(size),
+                    highScoreListId: gameConfigs[action.gameId].highscorelistid
                 });
         }
 
@@ -88,6 +103,22 @@ function tileGame(state = initialState, action) {
             return Object.assign({}, state, { tiles: newTiles });
         }
 
+        case HIGHSCORE_LIST_LOADED: {
+            return Object.assign({}, state, {
+                highScoreList: action.highScoreList
+            });
+        }
+        case NAME_CHANGED: {
+            return Object.assign({}, state, {
+                userName: action.name
+            });
+        }
+        case HIGHSCORE_LIST_SAVED: {
+            return Object.assign({}, state, {
+                highScoreListSaved: true,
+                highScoreList: action.highScoreList
+            });
+        }
         default:
             return state;
     }
