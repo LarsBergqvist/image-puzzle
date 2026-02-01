@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "deep-freeze": "^0.0.1",
-    "eslint": "^7.30.0",
+    "eslint": "^9.26.0",
     "eslint-plugin-react": "^7.24.0"
   }
 }
